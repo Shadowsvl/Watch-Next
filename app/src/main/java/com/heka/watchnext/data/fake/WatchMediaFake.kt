@@ -51,4 +51,13 @@ val fakeWatchTv2 = WatchMedia(
     mediaType = MediaType.Tv
 )
 
-val fakeWatchMediaList = listOf(fakeWatchMovie1, fakeWatchMovie2, fakeWatchTv1, fakeWatchTv2)
+val fakeWatchMediaList = listOf(
+    fakeWatchMovie1,
+    fakeWatchMovie2,
+    fakeWatchTv1,
+    fakeWatchTv2,
+    fakeWatchMovie1.copy( id = 1L ),
+    fakeWatchMovie2.copy( id = 2L ),
+    fakeWatchTv1.copy( id = 3L ),
+    fakeWatchTv2.copy( id = 4L )
+)
