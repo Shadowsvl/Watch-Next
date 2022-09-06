@@ -24,3 +24,7 @@ fun Message.asString(context: Context): String {
         is Message.StringResource -> context.getString(resId, *args)
     }
 }
+
+fun Message.textOr(fallback: String): String {
+    return (this as? Message.Text)?.value ?: fallback
+}

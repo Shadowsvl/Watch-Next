@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
@@ -23,6 +25,13 @@ fun LoadingContent(
     } else {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing),
+            indicator = { state, refreshTrigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = refreshTrigger,
+                    contentColor = MaterialTheme.colors.secondary
+                )
+            },
             onRefresh = onRefresh,
             content = content,
         )
@@ -49,6 +58,6 @@ fun FullScreenLoading() {
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = MaterialTheme.colors.secondary)
     }
 }

@@ -6,7 +6,10 @@ val BaseDP = 16.dp
 
 val SpaceDP = 8.dp
 
-val PosterCardWidth = 80.dp
-val PosterCardHeight = 120.dp
+val PosterCardWidth = 88.dp
+val PosterCardHeight = 132.dp
 
-val HomeSectionSpaceDp = 40.dp
+val MiniPosterWidth = 80.dp
+val MiniPosterHeight = 120.dp
+
+val HomeSectionSpaceDp = 48.dp

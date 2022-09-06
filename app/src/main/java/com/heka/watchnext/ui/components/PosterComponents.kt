@@ -37,7 +37,7 @@ fun PosterCard(
         placeholder = painterResource(R.drawable.ic_poster_placeholder),
         contentDescription = null,
         modifier = Modifier
-            .size(posterWidth, posterHeight)
+            .requiredSize(posterWidth, posterHeight)
             .clip(MaterialTheme.shapes.medium)
             .clickable { onPosterClicked() }
     )
