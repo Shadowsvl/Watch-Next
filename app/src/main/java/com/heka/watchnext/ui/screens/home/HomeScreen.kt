@@ -1,6 +1,8 @@
 package com.heka.watchnext.ui.screens.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -14,11 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.heka.watchnext.data.fake.fakeWatchSection
+import com.heka.watchnext.R
+import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.ui.components.*
 import com.heka.watchnext.ui.theme.BaseDP
 import com.heka.watchnext.ui.theme.BottomSheetShape
 import com.heka.watchnext.ui.theme.WatchNextTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -27,6 +31,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val myListState = rememberLazyListState()
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = bottomSheetState) {
@@ -35,12 +40,16 @@ fun HomeScreen(
                 HomeAction.ShowBottomSheet -> {
                     if (!bottomSheetState.isVisible) bottomSheetState.show()
                 }
+                HomeAction.AddListStateAnimation -> {
+                    myListState.animateScrollToItem(0)
+                }
             }
         }
     }
 
     HomeScreen(
         bottomSheetState = bottomSheetState,
+        myListState = myListState,
         uiState = uiState,
         onEvent = viewModel::onEvent
     )
@@ -50,6 +59,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     bottomSheetState: ModalBottomSheetState,
+    myListState: LazyListState,
     uiState: HomeUiState,
     onEvent: (HomeEvent) -> Unit
 ) {
@@ -63,7 +73,11 @@ private fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 uiState.watchMedia?.let {
-                    WatchMediaSheet(watchMedia = it)
+                    WatchMediaSheet(
+                        watchMedia = it,
+                        isMediaAdded = uiState.isMediaAdded,
+                        onListButtonClicked = { media -> onEvent(HomeEvent.OnListButtonClicked(media)) }
+                    )
                 } ?: CircularProgressIndicator()
             }
         }
@@ -81,6 +95,18 @@ private fun HomeScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(modifier = Modifier.height(100.dp))
+                    if (uiState.myListLatest.isNotEmpty()) {
+                        HomeSection(
+                            labelId = R.string.section_my_list_latest,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            PosterCarousel(
+                                listState = myListState,
+                                watchMediaList = uiState.myListLatest,
+                                onWatchMediaClicked = { onEvent(HomeEvent.OnWatchMediaChanged(it)) }
+                            )
+                        }
+                    }
                     uiState.watchSections.forEach { section ->
                         HomeSection(
                             labelId = section.labelId,
@@ -108,8 +134,9 @@ private fun HomeScreenPreview() {
         Surface {
             HomeScreen(
                 bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+                myListState = rememberLazyListState(),
                 uiState = HomeUiState(
-                    watchSections = listOf(fakeWatchSection),
+                    myListLatest = fakeWatchMediaList,
                     loading = false
                 ),
                 onEvent = {}

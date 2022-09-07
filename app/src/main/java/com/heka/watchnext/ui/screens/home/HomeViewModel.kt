@@ -7,8 +7,10 @@ import com.heka.watchnext.data.repository.WatchMediaRepository
 import com.heka.watchnext.data.successOr
 import com.heka.watchnext.model.WatchSection
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +31,14 @@ class HomeViewModel @Inject constructor(
     private val actionChannel = Channel<HomeAction>()
     val action = actionChannel.receiveAsFlow()
 
+    private var mediaAddedJob: Job? = null
+
     init {
+        viewModelScope.launch {
+            watchMediaRepository.getMyListLatest().collectLatest { latest ->
+                vmState.update { it.copy( myListLatest = latest ) }
+            }
+        }
         refreshContent()
     }
 
@@ -37,11 +46,28 @@ class HomeViewModel @Inject constructor(
         when(event) {
             is HomeEvent.OnWatchMediaChanged -> {
                 vmState.update { it.copy( watchMedia = event.watchMedia ) }
+                mediaAddedJob?.cancel()
+                mediaAddedJob = viewModelScope.launch {
+                    watchMediaRepository.isMediaAdded(event.watchMedia.id).collect { added ->
+                        vmState.update { it.copy( isMediaAdded = added ) }
+                    }
+                }
                 viewModelScope.launch { actionChannel.send(HomeAction.ShowBottomSheet) }
             }
             HomeEvent.RefreshContent -> {
                 vmState.update { it.copy( isRefreshing = true ) }
                 refreshContent()
+            }
+            is HomeEvent.OnListButtonClicked -> {
+                viewModelScope.launch {
+                    if (vmState.value.isMediaAdded) {
+                        watchMediaRepository.removeMedia(event.watchMedia)
+                    } else {
+                        watchMediaRepository.addMedia(event.watchMedia)
+                        delay(200)
+                        actionChannel.send(HomeAction.AddListStateAnimation)
+                    }
+                }
             }
         }
     }
@@ -113,4 +139,5 @@ class HomeViewModel @Inject constructor(
 
 sealed class HomeAction {
     object ShowBottomSheet: HomeAction()
+    object AddListStateAnimation: HomeAction()
 }

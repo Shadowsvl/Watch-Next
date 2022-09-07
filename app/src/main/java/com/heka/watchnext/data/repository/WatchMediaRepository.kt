@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface WatchMediaRepository {
 
+    fun getMyListLatest(): Flow<List<WatchMedia>>
+
     suspend fun getCinemaMovies(): DataResult<List<WatchMedia>>
 
     suspend fun getLatestMovies(): DataResult<List<WatchMedia>>
@@ -19,11 +21,15 @@ interface WatchMediaRepository {
 
     suspend fun getTrendingSeries(): DataResult<List<WatchMedia>>
 
+    fun isMediaAdded(id: Long): Flow<Boolean>
+
+    suspend fun addMedia(media: WatchMedia)
+
+    suspend fun removeMedia(media: WatchMedia)
+
     //fun getScrollableMedia(mediaType: MediaType): Flow<List<WatchMedia>>
 
     //suspend fun requestMoreMedia()
-
-    //fun getMediaListLatest(): Flow<List<WatchMedia>>
 
     //fun getAllMediaList(): Flow<List<WatchMedia>>
 
@@ -37,9 +43,4 @@ interface WatchMediaRepository {
 
     //suspend fun getMedia(id: Long): WatchMedia?
 
-    //fun isMediaInList(id: Long): Flow<Boolean>
-
-    //suspend fun addMedia(media: WatchMedia)
-
-    //suspend fun removeMedia(media: WatchMedia)
 }

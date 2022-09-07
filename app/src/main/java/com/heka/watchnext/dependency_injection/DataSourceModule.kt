@@ -1,6 +1,8 @@
 package com.heka.watchnext.dependency_injection
 
+import com.heka.watchnext.data.local.data_source.WatchMediaLDS
 import com.heka.watchnext.data.remote.data_source.WatchMediaRDS
+import com.heka.watchnext.data.repository.impl.WatchMediaLocalDataSource
 import com.heka.watchnext.data.repository.impl.WatchMediaRemoteDataSource
 import dagger.Binds
 import dagger.Module
@@ -17,5 +19,11 @@ abstract class DataSourceModule {
     abstract fun bindsWatchMediaRemoteDataSource(
         watchMediaRDS: WatchMediaRDS
     ): WatchMediaRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsWatchMediaLocalDataSource(
+        watchMediaLDS: WatchMediaLDS
+    ): WatchMediaLocalDataSource
 
 }

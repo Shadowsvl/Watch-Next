@@ -2,9 +2,11 @@ package com.heka.watchnext.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,10 +33,10 @@ fun PosterCard(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(posterUrl)
-            .placeholder(R.drawable.ic_poster_placeholder)
             .build(),
         contentScale = ContentScale.Crop,
         placeholder = painterResource(R.drawable.ic_poster_placeholder),
+        error = painterResource(R.drawable.ic_poster_placeholder),
         contentDescription = null,
         modifier = Modifier
             .requiredSize(posterWidth, posterHeight)
@@ -57,9 +59,11 @@ private fun PosterCardPreview() {
 fun PosterCarousel(
     watchMediaList: List<WatchMedia>,
     onWatchMediaClicked: (WatchMedia) -> Unit,
+    listState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier
 ) {
     LazyRow(
+        state = listState,
         contentPadding = PaddingValues(horizontal = BaseDP),
         horizontalArrangement = Arrangement.spacedBy(SpaceDP),
         modifier = modifier
