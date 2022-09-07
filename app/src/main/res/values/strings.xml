@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Watch Next</string>
+
+    <!-- Home Sections -->
+    <string name="section_my_list_latest">Recientes en mi lista</string>
+    <string name="section_cinema_movies">En cines</string>
+    <string name="section_latest_movies">Películas recientes</string>
+    <string name="section_trending_movies">Películas en tendencia</string>
+    <string name="section_on_air_series">Estrenos en series</string>
+    <string name="section_latest_series">Series recientes</string>
+    <string name="section_trending_series">Series en tendencia</string>
+
+    <!-- Media Type -->
+    <string name="media_type_movie">Película</string>
+    <string name="media_type_tv">Serie</string>
 </resources>
