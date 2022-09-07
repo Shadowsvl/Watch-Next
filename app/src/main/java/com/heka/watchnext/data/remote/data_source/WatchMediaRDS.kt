@@ -25,7 +25,8 @@ class WatchMediaRDS @Inject constructor(
                     DataResult.Error(
                         Message.Text(
                             response.errorDto?.statusMessage ?: response.errorMessage
-                        )
+                        ),
+                        tag = response.httpError.name
                     )
                 }
             }

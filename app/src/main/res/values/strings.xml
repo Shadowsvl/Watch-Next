@@ -13,4 +13,7 @@
     <!-- Media Type -->
     <string name="media_type_movie">Película</string>
     <string name="media_type_tv">Serie</string>
+
+    <!-- Notify Errors -->
+    <string name="notify_invalid_api_key">La llave de API usada no es válida</string>
 </resources>

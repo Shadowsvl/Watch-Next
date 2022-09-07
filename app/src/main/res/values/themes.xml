@@ -2,6 +2,6 @@
 <resources>
 
     <style name="Theme.WatchNext" parent="android:Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">@color/black_700</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

@@ -17,12 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heka.watchnext.R
+import com.heka.watchnext.data.asString
 import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.ui.components.*
 import com.heka.watchnext.ui.theme.BaseDP
 import com.heka.watchnext.ui.theme.BottomSheetShape
 import com.heka.watchnext.ui.theme.WatchNextTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -89,36 +89,43 @@ private fun HomeScreen(
             onRefresh = { onEvent(HomeEvent.RefreshContent) }
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Spacer(modifier = Modifier.height(100.dp))
-                    if (uiState.myListLatest.isNotEmpty()) {
-                        HomeSection(
-                            labelId = R.string.section_my_list_latest,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            PosterCarousel(
-                                listState = myListState,
-                                watchMediaList = uiState.myListLatest,
-                                onWatchMediaClicked = { onEvent(HomeEvent.OnWatchMediaChanged(it)) }
-                            )
+                if (uiState.authErrorMessage != null) {
+                    NotifyApiKeyValidationError(
+                        errorMessage = uiState.authErrorMessage.asString(),
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Spacer(modifier = Modifier.height(100.dp))
+                        if (uiState.myListLatest.isNotEmpty()) {
+                            HomeSection(
+                                labelId = R.string.section_my_list_latest,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                PosterCarousel(
+                                    listState = myListState,
+                                    watchMediaList = uiState.myListLatest,
+                                    onWatchMediaClicked = { onEvent(HomeEvent.OnWatchMediaChanged(it)) }
+                                )
+                            }
                         }
-                    }
-                    uiState.watchSections.forEach { section ->
-                        HomeSection(
-                            labelId = section.labelId,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            PosterCarousel(
-                                watchMediaList = section.watchMediaList,
-                                onWatchMediaClicked = { onEvent(HomeEvent.OnWatchMediaChanged(it)) }
-                            )
+                        uiState.watchSections.forEach { section ->
+                            HomeSection(
+                                labelId = section.labelId,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                PosterCarousel(
+                                    watchMediaList = section.watchMediaList,
+                                    onWatchMediaClicked = { onEvent(HomeEvent.OnWatchMediaChanged(it)) }
+                                )
+                            }
                         }
+                        Spacer(modifier = Modifier.height(BaseDP))
                     }
-                    Spacer(modifier = Modifier.height(BaseDP))
                 }
                 HomeTopBar()
             }
