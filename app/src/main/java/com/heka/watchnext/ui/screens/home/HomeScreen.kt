@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.heka.watchnext.R
 import com.heka.watchnext.data.asString
 import com.heka.watchnext.data.fake.fakeWatchMediaList
+import com.heka.watchnext.model.MediaType
 import com.heka.watchnext.ui.components.*
 import com.heka.watchnext.ui.templates.WatchMediaBottomSheetLayout
 import com.heka.watchnext.ui.theme.BaseDP
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun HomeScreen(
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToInfiniteList: (mediaTypeName: String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -52,6 +54,7 @@ fun HomeScreen(
         myListState = myListState,
         uiState = uiState,
         navigateToDetail = navigateToDetail,
+        navigateToInfiniteList = navigateToInfiniteList,
         onEvent = viewModel::onEvent
     )
 }
@@ -63,6 +66,7 @@ private fun HomeScreen(
     myListState: LazyListState,
     uiState: HomeUiState,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToInfiniteList: (mediaTypeName: String) -> Unit,
     onEvent: (HomeEvent) -> Unit
 ) {
     WatchMediaBottomSheetLayout(
@@ -120,7 +124,10 @@ private fun HomeScreen(
                         Spacer(modifier = Modifier.height(BaseDP))
                     }
                 }
-                HomeTopBar()
+                HomeTopBar(
+                    onMoviesClicked = { navigateToInfiniteList(MediaType.Movie.name) },
+                    onSeriesClicked = { navigateToInfiniteList(MediaType.Tv.name) }
+                )
             }
         }
     }
@@ -140,6 +147,7 @@ private fun HomeScreenPreview() {
                     loading = false
                 ),
                 navigateToDetail = { _,_ -> },
+                navigateToInfiniteList = {},
                 onEvent = {}
             )
         }

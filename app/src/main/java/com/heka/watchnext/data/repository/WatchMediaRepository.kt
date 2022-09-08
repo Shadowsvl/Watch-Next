@@ -37,9 +37,11 @@ interface WatchMediaRepository {
 
     suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>>
 
-    //fun getScrollableMedia(mediaType: MediaType): Flow<List<WatchMedia>>
+    fun getInfiniteMedia(mediaType: MediaType): Flow<List<WatchMedia>>
 
-    //suspend fun requestMoreMedia()
+    suspend fun requestMoreMedia()
+
+    suspend fun clearMedia()
 
     //fun getAllMediaList(): Flow<List<WatchMedia>>
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,11 +23,13 @@ import com.heka.watchnext.R
 import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.ui.theme.BaseDP
 import com.heka.watchnext.ui.theme.HomeSectionSpaceDp
+import com.heka.watchnext.ui.theme.SpaceDP
 import com.heka.watchnext.ui.theme.WatchNextTheme
 
 @Composable
 fun HomeTopBar(
-
+    onMoviesClicked: () -> Unit,
+    onSeriesClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -35,7 +38,7 @@ fun HomeTopBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colors.surface)
-                .padding(BaseDP)
+                .padding(top = BaseDP)
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_watch_next_icon),
@@ -45,7 +48,9 @@ fun HomeTopBar(
                     .requiredSize(40.dp)
             )
         }
-        Box(
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(BaseDP),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
@@ -55,11 +60,27 @@ fun HomeTopBar(
                             MaterialTheme.colors.surface,
                             Color.Transparent
                         ),
-                        startY = 20f
+                        startY = 50f
                     )
                 )
         ) {
-
+            Spacer(modifier = Modifier.width(SpaceDP))
+            TextButton(onClick = onMoviesClicked) {
+                Text(
+                    text = stringResource(id = R.string.screen_label_movies),
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            }
+            TextButton(onClick = onSeriesClicked) {
+                Text(
+                    text = stringResource(id = R.string.screen_label_series),
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            }
         }
     }
 }
@@ -68,7 +89,12 @@ fun HomeTopBar(
 @Composable
 private fun HomeTopBarPreview() {
     WatchNextTheme {
-        HomeTopBar()
+        Surface {
+            HomeTopBar(
+                onMoviesClicked = {},
+                onSeriesClicked = {}
+            )
+        }
     }
 }
 
