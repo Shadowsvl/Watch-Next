@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,14 +19,15 @@ import com.heka.watchnext.R
 import com.heka.watchnext.data.asString
 import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.ui.components.*
+import com.heka.watchnext.ui.templates.WatchMediaBottomSheetLayout
 import com.heka.watchnext.ui.theme.BaseDP
-import com.heka.watchnext.ui.theme.BottomSheetShape
 import com.heka.watchnext.ui.theme.WatchNextTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
+    navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -51,6 +51,7 @@ fun HomeScreen(
         bottomSheetState = bottomSheetState,
         myListState = myListState,
         uiState = uiState,
+        navigateToDetail = navigateToDetail,
         onEvent = viewModel::onEvent
     )
 }
@@ -61,26 +62,15 @@ private fun HomeScreen(
     bottomSheetState: ModalBottomSheetState,
     myListState: LazyListState,
     uiState: HomeUiState,
+    navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     onEvent: (HomeEvent) -> Unit
 ) {
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        sheetShape = BottomSheetShape,
-        scrimColor = Color.Transparent,
-        sheetContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                uiState.watchMedia?.let {
-                    WatchMediaSheet(
-                        watchMedia = it,
-                        isMediaAdded = uiState.isMediaAdded,
-                        onListButtonClicked = { media -> onEvent(HomeEvent.OnListButtonClicked(media)) }
-                    )
-                } ?: CircularProgressIndicator()
-            }
-        }
+    WatchMediaBottomSheetLayout(
+        bottomSheetState = bottomSheetState,
+        watchMedia = uiState.watchMedia,
+        isMediaAdded = uiState.isMediaAdded,
+        onListButtonClicked = { onEvent(HomeEvent.OnListButtonClicked(it)) },
+        onInfoButtonClicked = { navigateToDetail(it.id, it.mediaType.name) }
     ) {
         LoadingContent(
             empty = uiState.loading,
@@ -101,8 +91,9 @@ private fun HomeScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(100.dp))
+
                         if (uiState.myListLatest.isNotEmpty()) {
-                            HomeSection(
+                            WatchNextSection(
                                 labelId = R.string.section_my_list_latest,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -113,8 +104,9 @@ private fun HomeScreen(
                                 )
                             }
                         }
+
                         uiState.watchSections.forEach { section ->
-                            HomeSection(
+                            WatchNextSection(
                                 labelId = section.labelId,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -124,6 +116,7 @@ private fun HomeScreen(
                                 )
                             }
                         }
+
                         Spacer(modifier = Modifier.height(BaseDP))
                     }
                 }
@@ -146,6 +139,7 @@ private fun HomeScreenPreview() {
                     myListLatest = fakeWatchMediaList,
                     loading = false
                 ),
+                navigateToDetail = { _,_ -> },
                 onEvent = {}
             )
         }

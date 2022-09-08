@@ -36,4 +36,10 @@ class WatchMediaLDS @Inject constructor(
             watchMediaDao.deleteMediaById(media.id)
         }
     }
+
+    override suspend fun getMedia(id: Long): WatchMedia? {
+        return withContext(Dispatchers.IO) {
+            watchMediaDao.getMediaById(id)?.toWatchMedia()
+        }
+    }
 }

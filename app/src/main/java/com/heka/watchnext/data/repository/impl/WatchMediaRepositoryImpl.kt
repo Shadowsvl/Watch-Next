@@ -30,6 +30,16 @@ class WatchMediaRepositoryImpl @Inject constructor(
     override suspend fun addMedia(media: WatchMedia) = watchMediaLocal.addMedia(media)
 
     override suspend fun removeMedia(media: WatchMedia) = watchMediaLocal.removeMedia(media)
+
+    override suspend fun getMedia(id: Long): WatchMedia? = watchMediaLocal.getMedia(id)
+
+    override suspend fun getMovie(id: Long): DataResult<WatchMedia> = watchMediaRemote.getMovie(id)
+
+    override suspend fun getTv(id: Long): DataResult<WatchMedia> = watchMediaRemote.getTv(id)
+
+    override suspend fun getSimilarMovies(id: Long): DataResult<List<WatchMedia>> = watchMediaRemote.getSimilarMovies(id)
+
+    override suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>> = watchMediaRemote.getSimilarSeries(id)
 }
 
 interface WatchMediaRemoteDataSource {
@@ -46,6 +56,14 @@ interface WatchMediaRemoteDataSource {
 
     suspend fun getTrendingSeries(): DataResult<List<WatchMedia>>
 
+    suspend fun getMovie(id: Long): DataResult<WatchMedia>
+
+    suspend fun getTv(id: Long): DataResult<WatchMedia>
+
+    suspend fun getSimilarMovies(id: Long): DataResult<List<WatchMedia>>
+
+    suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>>
+
 }
 
 interface WatchMediaLocalDataSource {
@@ -57,5 +75,7 @@ interface WatchMediaLocalDataSource {
     suspend fun addMedia(media: WatchMedia)
 
     suspend fun removeMedia(media: WatchMedia)
+
+    suspend fun getMedia(id: Long): WatchMedia?
 
 }

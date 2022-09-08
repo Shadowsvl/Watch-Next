@@ -1,12 +1,14 @@
 package com.heka.watchnext.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,7 +24,8 @@ import com.heka.watchnext.ui.theme.*
 fun WatchMediaSheet(
     watchMedia: WatchMedia,
     isMediaAdded: Boolean,
-    onListButtonClicked: (WatchMedia) -> Unit
+    onListButtonClicked: (WatchMedia) -> Unit,
+    onInfoButtonClicked: (WatchMedia) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(BaseDP),
@@ -86,6 +89,25 @@ fun WatchMediaSheet(
             maxLines = 4,
             overflow = TextOverflow.Ellipsis
         )
+        Divider()
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .clip(MaterialTheme.shapes.medium)
+                .clickable { onInfoButtonClicked(watchMedia) }
+        ) {
+            Text(
+                text = stringResource(id = R.string.watch_media_sheet_info),
+                style = MaterialTheme.typography.subtitle1
+            )
+            Icon(
+                imageVector = Icons.Filled.ArrowForward,
+                contentDescription = null
+            )
+        }
     }
 }
 
@@ -97,7 +119,8 @@ private fun WatchMediaSheetPreview() {
             WatchMediaSheet(
                 watchMedia = fakeWatchMovie1,
                 isMediaAdded = false,
-                onListButtonClicked = {}
+                onListButtonClicked = {},
+                onInfoButtonClicked = {}
             )
         }
     }
