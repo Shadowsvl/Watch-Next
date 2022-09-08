@@ -27,20 +27,20 @@ interface WatchMediaRepository {
 
     suspend fun removeMedia(media: WatchMedia)
 
+    suspend fun getMedia(id: Long): WatchMedia?
+
+    suspend fun getMovie(id: Long): DataResult<WatchMedia>
+
+    suspend fun getTv(id: Long): DataResult<WatchMedia>
+
+    suspend fun getSimilarMovies(id: Long): DataResult<List<WatchMedia>>
+
+    suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>>
+
     //fun getScrollableMedia(mediaType: MediaType): Flow<List<WatchMedia>>
 
     //suspend fun requestMoreMedia()
 
     //fun getAllMediaList(): Flow<List<WatchMedia>>
-
-    //suspend fun getMovie(id: Long): DataResult<WatchMedia>
-
-    //suspend fun getSimilarMovies(id: Long): DataResult<List<WatchMedia>>
-
-    //suspend fun getTv(id: Long): DataResult<WatchMedia>
-
-    //suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>>
-
-    //suspend fun getMedia(id: Long): WatchMedia?
 
 }

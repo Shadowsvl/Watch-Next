@@ -73,7 +73,7 @@ private fun HomeTopBarPreview() {
 }
 
 @Composable
-fun HomeSection(
+fun WatchNextSection(
     @StringRes labelId: Int,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
@@ -91,12 +91,12 @@ fun HomeSection(
     }
 }
 
-@Preview("Home section", showBackground = true)
+@Preview("Watch next section", showBackground = true)
 @Composable
-private fun HomeSectionPreview() {
+private fun WatchNextSectionPreview() {
     WatchNextTheme {
         Surface {
-            HomeSection(
+            WatchNextSection(
                 labelId = R.string.app_name,
                 modifier = Modifier.fillMaxWidth(),
                 content = {

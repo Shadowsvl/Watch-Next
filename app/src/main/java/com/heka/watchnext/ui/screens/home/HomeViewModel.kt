@@ -3,9 +3,11 @@ package com.heka.watchnext.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heka.watchnext.R
+import com.heka.watchnext.data.DataResult
 import com.heka.watchnext.data.repository.WatchMediaRepository
 import com.heka.watchnext.data.successOr
 import com.heka.watchnext.model.WatchSection
+import com.heka.web_helper_kt.HttpError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -83,13 +85,28 @@ class HomeViewModel @Inject constructor(
 
             val watchSections = mutableListOf<WatchSection>()
 
-            cinemaMoviesResult.await().successOr(emptyList()).let {
-                if (it.isNotEmpty()) watchSections.add(
-                    WatchSection(
-                        labelId = R.string.section_cinema_movies,
-                        watchMediaList = it
+            when(val result = cinemaMoviesResult.await()) {
+                is DataResult.Success -> {
+                    val mediaList = result.successOr(emptyList())
+                    if (mediaList.isNotEmpty()) watchSections.add(
+                        WatchSection(
+                            labelId = R.string.section_cinema_movies,
+                            watchMediaList = mediaList
+                        )
                     )
-                )
+                }
+                is DataResult.Error -> {
+                    if (result.tag == HttpError.Unauthorized.name) {
+                        vmState.update {
+                            it.copy(
+                                authErrorMessage = result.message,
+                                isRefreshing = false,
+                                loading = false
+                            )
+                        }
+                        return@launch
+                    }
+                }
             }
             latestMoviesResult.await().successOr(emptyList()).let {
                 if (it.isNotEmpty()) watchSections.add(
@@ -132,7 +149,14 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
-            vmState.update { it.copy( watchSections = watchSections, isRefreshing = false, loading = false ) }
+            vmState.update {
+                it.copy(
+                    watchSections = watchSections,
+                    authErrorMessage = null,
+                    isRefreshing = false,
+                    loading = false
+                )
+            }
         }
     }
 }

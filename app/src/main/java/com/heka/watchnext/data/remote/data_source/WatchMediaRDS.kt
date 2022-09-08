@@ -25,7 +25,8 @@ class WatchMediaRDS @Inject constructor(
                     DataResult.Error(
                         Message.Text(
                             response.errorDto?.statusMessage ?: response.errorMessage
-                        )
+                        ),
+                        tag = response.httpError.name
                     )
                 }
             }
@@ -95,6 +96,66 @@ class WatchMediaRDS @Inject constructor(
     override suspend fun getTrendingSeries(): DataResult<List<WatchMedia>> {
         return withContext(Dispatchers.IO) {
             when(val response = tmdbApi.getTrendingSeries().toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun getMovie(id: Long): DataResult<WatchMedia> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.getMovie(id).toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.toWatchMedia())
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun getTv(id: Long): DataResult<WatchMedia> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.getTv(id).toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.toWatchMedia())
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun getSimilarMovies(id: Long): DataResult<List<WatchMedia>> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.getSimilarMovies(id).toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.getSimilarSeries(id).toServiceResponse(WatchMediaErrorDto::class.java)) {
                 is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
                 is ServiceResponse.Error -> {
                     DataResult.Error(
