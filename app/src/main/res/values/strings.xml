@@ -11,6 +11,11 @@
     <string name="section_trending_series">Series en tendencia</string>
     <string name="section_similar_content">Contenido similar</string>
 
+    <!-- Watch Next Screen Labels -->
+    <string name="screen_label_movies">Películas</string>
+    <string name="screen_label_series">Series</string>
+    <string name="screen_label_my_list">Mi lista</string>
+
     <!-- Media Type -->
     <string name="media_type_movie">Película</string>
     <string name="media_type_tv">Serie</string>

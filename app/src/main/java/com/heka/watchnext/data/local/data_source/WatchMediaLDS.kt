@@ -42,4 +42,9 @@ class WatchMediaLDS @Inject constructor(
             watchMediaDao.getMediaById(id)?.toWatchMedia()
         }
     }
+
+    override fun getMyList(): Flow<List<WatchMedia>> = watchMediaDao
+        .flowAllMedia()
+        .map { it.map { entity -> entity.toWatchMedia() } }
+        .flowOn(Dispatchers.IO)
 }

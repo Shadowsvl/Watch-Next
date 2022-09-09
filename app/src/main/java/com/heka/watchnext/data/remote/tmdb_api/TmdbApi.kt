@@ -13,7 +13,7 @@ interface TmdbApi {
     @GET("movie/now_playing?language=es&region=MX")
     suspend fun getCinemaMovies(): Response<WatchMediaDto<MovieDto>>
 
-    @GET("discover/movie?language=es&include_adult=false")
+    @GET("discover/movie?language=es&include_adult=false&include_video=false&region=MX")
     suspend fun getLatestMovies(@Query("page") page: Int = 1): Response<WatchMediaDto<MovieDto>>
 
     @GET("trending/movie/week?language=es")
@@ -25,13 +25,13 @@ interface TmdbApi {
     @GET("search/movie?language=es&include_adult=false")
     suspend fun searchMovie(@Query("query") search: String): Response<WatchMediaDto<MovieDto>>
 
-    @GET("movie/{movie_id}/similar?language=es")
+    @GET("movie/{movie_id}/recommendations?language=es")
     suspend fun getSimilarMovies(@Path("movie_id") id: Long): Response<WatchMediaDto<MovieDto>>
 
     @GET("tv/on_the_air?language=es")
     suspend fun getOnAirSeries(): Response<WatchMediaDto<TvDto>>
 
-    @GET("discover/tv?language=es&include_adult=false")
+    @GET("discover/tv?language=es&include_adult=false&include_video=false&region=MX")
     suspend fun getLatestSeries(@Query("page") page: Int = 1): Response<WatchMediaDto<TvDto>>
 
     @GET("trending/tv/week?language=es")
@@ -43,6 +43,6 @@ interface TmdbApi {
     @GET("search/tv?language=es&include_adult=false")
     suspend fun searchTv(@Query("query") search: String): Response<WatchMediaDto<TvDto>>
 
-    @GET("tv/{tv_id}/similar?language=es")
+    @GET("tv/{tv_id}/recommendations?language=es")
     suspend fun getSimilarSeries(@Path("tv_id") id: Long): Response<WatchMediaDto<TvDto>>
 }

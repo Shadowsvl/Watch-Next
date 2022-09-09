@@ -33,9 +33,9 @@ class WatchMediaRDS @Inject constructor(
         }
     }
 
-    override suspend fun getLatestMovies(): DataResult<List<WatchMedia>> {
+    override suspend fun getLatestMovies(page: Int): DataResult<List<WatchMedia>> {
         return withContext(Dispatchers.IO) {
-            when(val response = tmdbApi.getLatestMovies().toServiceResponse(WatchMediaErrorDto::class.java)) {
+            when(val response = tmdbApi.getLatestMovies(page).toServiceResponse(WatchMediaErrorDto::class.java)) {
                 is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
                 is ServiceResponse.Error -> {
                     DataResult.Error(
@@ -78,9 +78,9 @@ class WatchMediaRDS @Inject constructor(
         }
     }
 
-    override suspend fun getLatestSeries(): DataResult<List<WatchMedia>> {
+    override suspend fun getLatestSeries(page: Int): DataResult<List<WatchMedia>> {
         return withContext(Dispatchers.IO) {
-            when(val response = tmdbApi.getLatestSeries().toServiceResponse(WatchMediaErrorDto::class.java)) {
+            when(val response = tmdbApi.getLatestSeries(page).toServiceResponse(WatchMediaErrorDto::class.java)) {
                 is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
                 is ServiceResponse.Error -> {
                     DataResult.Error(

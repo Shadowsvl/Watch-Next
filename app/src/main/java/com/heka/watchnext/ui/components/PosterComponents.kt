@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.heka.watchnext.R
@@ -97,7 +98,12 @@ fun PosterGrid(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(PosterCardWidth),
-        contentPadding = PaddingValues(BaseDP),
+        contentPadding = PaddingValues(
+            top = 86.dp,
+            start = BaseDP,
+            end = BaseDP,
+            bottom = BaseDP
+        ),
         horizontalArrangement = Arrangement.spacedBy(SpaceDP),
         verticalArrangement = Arrangement.spacedBy(SpaceDP),
         state = gridState,

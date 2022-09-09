@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heka.watchnext.R
+import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.data.fake.fakeWatchMovie1
 import com.heka.watchnext.ui.components.*
 import com.heka.watchnext.ui.templates.WatchMediaBottomSheetLayout
@@ -116,6 +117,7 @@ private fun DetailScreenPreview() {
                 bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
                 uiState = DetailUiState(
                     watchMedia = fakeWatchMovie1,
+                    similarMedia = fakeWatchMediaList,
                     loading = false
                 ),
                 onBack = {},
