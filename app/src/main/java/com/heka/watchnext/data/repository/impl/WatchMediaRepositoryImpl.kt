@@ -88,6 +88,8 @@ class WatchMediaRepositoryImpl @Inject constructor(
             MediaType.Tv -> watchMediaRemote.getLatestSeries(page)
         }
     }
+
+    override fun getMyList(): Flow<List<WatchMedia>> = watchMediaLocal.getMyList()
 }
 
 interface WatchMediaRemoteDataSource {
@@ -125,5 +127,7 @@ interface WatchMediaLocalDataSource {
     suspend fun removeMedia(media: WatchMedia)
 
     suspend fun getMedia(id: Long): WatchMedia?
+
+    fun getMyList(): Flow<List<WatchMedia>>
 
 }

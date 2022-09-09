@@ -43,6 +43,6 @@ interface WatchMediaRepository {
 
     suspend fun clearMedia()
 
-    //fun getAllMediaList(): Flow<List<WatchMedia>>
+    fun getMyList(): Flow<List<WatchMedia>>
 
 }

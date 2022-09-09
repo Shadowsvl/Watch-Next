@@ -1,4 +1,4 @@
-package com.heka.watchnext.ui.screens.infinite_list
+package com.heka.watchnext.ui.screens.my_list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.heka.watchnext.R
-import com.heka.watchnext.data.extensions.isCloseToBottom
 import com.heka.watchnext.data.fake.fakeWatchMediaList
 import com.heka.watchnext.ui.components.*
 import com.heka.watchnext.ui.templates.WatchMediaBottomSheetLayout
@@ -23,10 +22,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InfiniteListScreen(
+fun MyListScreen(
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
-    viewModel: InfiniteListViewModel = hiltViewModel()
+    viewModel: MyListViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val gridState = rememberLazyGridState()
@@ -35,24 +34,14 @@ fun InfiniteListScreen(
     LaunchedEffect(key1 = bottomSheetState) {
         viewModel.action.collectLatest { action ->
             when(action) {
-                InfiniteListAction.ShowBottomSheet -> {
+                MyListAction.ShowBottomSheet -> {
                     if (!bottomSheetState.isVisible) bottomSheetState.show()
                 }
             }
         }
     }
 
-    val isGridCloseToBottom by remember {
-        derivedStateOf {
-            uiState.infiniteWatchMediaList.isNotEmpty() && gridState.isCloseToBottom()
-        }
-    }
-
-    LaunchedEffect(key1 = isGridCloseToBottom) {
-        if (isGridCloseToBottom) viewModel.onEvent(InfiniteListEvent.RequestMoreMedia)
-    }
-
-    InfiniteListScreen(
+    MyListScreen(
         bottomSheetState = bottomSheetState,
         gridState = gridState,
         uiState = uiState,
@@ -64,13 +53,13 @@ fun InfiniteListScreen(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun InfiniteListScreen(
+private fun MyListScreen(
     bottomSheetState: ModalBottomSheetState,
     gridState: LazyGridState,
-    uiState: InfiniteListUiState,
+    uiState: MyListUiState,
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
-    onEvent: (InfiniteListEvent) -> Unit
+    onEvent: (MyListEvent) -> Unit
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -84,24 +73,24 @@ private fun InfiniteListScreen(
         bottomSheetState = bottomSheetState,
         watchMedia = uiState.watchMedia,
         isMediaAdded = uiState.isMediaAdded,
-        onListButtonClicked = { onEvent(InfiniteListEvent.OnListButtonClicked(it)) },
+        onListButtonClicked = { onEvent(MyListEvent.OnListButtonClicked(it)) },
         onInfoButtonClicked = { navigateToDetail(it.id, it.mediaType.name) }
     ) {
         LoadingContent(
-            empty = uiState.infiniteWatchMediaList.isEmpty(),
+            empty = uiState.loading,
             emptyContent = { FullScreenLoading() }
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 PosterGrid(
-                    watchMediaList = uiState.infiniteWatchMediaList,
+                    watchMediaList = uiState.myWatchMediaList,
                     onWatchMediaClicked = {
-                        onEvent(InfiniteListEvent.OnWatchMediaChanged(it))
+                        onEvent(MyListEvent.OnWatchMediaChanged(it))
                     },
                     gridState = gridState,
                     modifier = Modifier.fillMaxSize()
                 )
 
-                WatchNextScreenTopBar(screenLabelId = uiState.screenLabelId) {
+                WatchNextScreenTopBar(screenLabelId = R.string.screen_label_my_list) {
                     onBack()
                 }
 
@@ -115,22 +104,26 @@ private fun InfiniteListScreen(
                     }
                 }
             }
+
+            SideEffect {
+                if (uiState.myWatchMediaList.isEmpty()) onBack()
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@Preview("Infinite list screen", showBackground = true)
+@Preview("My list screen", showBackground = true)
 @Composable
-private fun InfiniteListScreenPreview() {
+private fun MyListScreenPreview() {
     WatchNextTheme {
         Surface {
-            InfiniteListScreen(
+            MyListScreen(
                 bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
                 gridState = rememberLazyGridState(),
-                uiState = InfiniteListUiState(
-                    screenLabelId = R.string.screen_label_movies,
-                    infiniteWatchMediaList = fakeWatchMediaList
+                uiState = MyListUiState(
+                    myWatchMediaList = fakeWatchMediaList,
+                    loading = false
                 ),
                 onBack = {},
                 navigateToDetail = {_,_ -> },

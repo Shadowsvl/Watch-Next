@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun HomeScreen(
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     navigateToInfiniteList: (mediaTypeName: String) -> Unit,
+    navigateToMyList: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -55,6 +56,7 @@ fun HomeScreen(
         uiState = uiState,
         navigateToDetail = navigateToDetail,
         navigateToInfiniteList = navigateToInfiniteList,
+        navigateToMyList = navigateToMyList,
         onEvent = viewModel::onEvent
     )
 }
@@ -67,6 +69,7 @@ private fun HomeScreen(
     uiState: HomeUiState,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     navigateToInfiniteList: (mediaTypeName: String) -> Unit,
+    navigateToMyList: () -> Unit,
     onEvent: (HomeEvent) -> Unit
 ) {
     WatchMediaBottomSheetLayout(
@@ -126,7 +129,9 @@ private fun HomeScreen(
                 }
                 HomeTopBar(
                     onMoviesClicked = { navigateToInfiniteList(MediaType.Movie.name) },
-                    onSeriesClicked = { navigateToInfiniteList(MediaType.Tv.name) }
+                    onSeriesClicked = { navigateToInfiniteList(MediaType.Tv.name) },
+                    myListEnabled = uiState.myListLatest.isNotEmpty(),
+                    onMyListClicked = { navigateToMyList() }
                 )
             }
         }
@@ -148,6 +153,7 @@ private fun HomeScreenPreview() {
                 ),
                 navigateToDetail = { _,_ -> },
                 navigateToInfiniteList = {},
+                navigateToMyList = {},
                 onEvent = {}
             )
         }

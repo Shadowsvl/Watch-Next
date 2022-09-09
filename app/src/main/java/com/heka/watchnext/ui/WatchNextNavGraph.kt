@@ -11,11 +11,13 @@ import androidx.navigation.navArgument
 import com.heka.watchnext.ui.screens.detail.DetailScreen
 import com.heka.watchnext.ui.screens.home.HomeScreen
 import com.heka.watchnext.ui.screens.infinite_list.InfiniteListScreen
+import com.heka.watchnext.ui.screens.my_list.MyListScreen
 
 object Routes {
     const val HOME = "home"
     const val DETAIL = "detail"
     const val INFINITE_LIST = "infiniteList"
+    const val MY_LIST = "myList"
 }
 
 object Arguments {
@@ -37,7 +39,8 @@ fun WatchNextNavGraph(
         composable(route = Routes.HOME) {
             HomeScreen(
                 navigateToDetail = actions.navigateToDetail,
-                navigateToInfiniteList = actions.navigateToInfiniteList
+                navigateToInfiniteList = actions.navigateToInfiniteList,
+                navigateToMyList = actions.navigateToMyList
             )
         }
 
@@ -65,6 +68,13 @@ fun WatchNextNavGraph(
                 navigateToDetail = actions.navigateToDetail
             )
         }
+
+        composable(route = Routes.MY_LIST) {
+            MyListScreen(
+                onBack = actions.navigateBack,
+                navigateToDetail = actions.navigateToDetail
+            )
+        }
     }
 }
 
@@ -76,6 +86,10 @@ private class NavigationActions(navController: NavHostController) {
 
     val navigateToInfiniteList: (mediaTypeName: String) -> Unit = { mediaTypeName ->
         navController.navigate("${Routes.INFINITE_LIST}/$mediaTypeName")
+    }
+
+    val navigateToMyList: () -> Unit = {
+        navController.navigate(Routes.MY_LIST)
     }
 
     val navigateBack: () -> Unit = {

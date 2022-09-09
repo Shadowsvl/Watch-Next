@@ -29,7 +29,9 @@ import com.heka.watchnext.ui.theme.WatchNextTheme
 @Composable
 fun HomeTopBar(
     onMoviesClicked: () -> Unit,
-    onSeriesClicked: () -> Unit
+    onSeriesClicked: () -> Unit,
+    myListEnabled: Boolean = false,
+    onMyListClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -81,6 +83,16 @@ fun HomeTopBar(
                     color = MaterialTheme.colors.onSurface
                 )
             }
+            if (myListEnabled) {
+                TextButton(onClick = onMyListClicked) {
+                    Text(
+                        text = stringResource(id = R.string.screen_label_my_list),
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
+            }
         }
     }
 }
@@ -92,7 +104,9 @@ private fun HomeTopBarPreview() {
         Surface {
             HomeTopBar(
                 onMoviesClicked = {},
-                onSeriesClicked = {}
+                onSeriesClicked = {},
+                myListEnabled = true,
+                onMyListClicked = {}
             )
         }
     }
