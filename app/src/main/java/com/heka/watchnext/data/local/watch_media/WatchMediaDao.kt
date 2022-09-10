@@ -18,6 +18,9 @@ interface WatchMediaDao {
     @Query("SELECT EXISTS(SELECT * FROM watch_media WHERE id = :id)")
     fun flowCheckExistsById(id: Long): Flow<Boolean>
 
+    @Query("SELECT * FROM watch_media WHERE LOWER(original_title) LIKE '%' || LOWER(:query) || '%' OR LOWER(title) LIKE '%' || LOWER(:query) || '%'")
+    suspend fun searchMedia(query: String): List<WatchMediaEntity>
+
     @Query("SELECT * FROM watch_media WHERE id = :id")
     suspend fun getMediaById(id: Long): WatchMediaEntity?
 

@@ -10,11 +10,15 @@
     <string name="section_latest_series">Series recientes</string>
     <string name="section_trending_series">Series en tendencia</string>
     <string name="section_similar_content">Contenido similar</string>
+    <string name="section_search_result_my_list">En mi lista</string>
+    <string name="section_search_result_movies">Resultados en películas</string>
+    <string name="section_search_result_series">Resultados en series</string>
 
     <!-- Watch Next Screen Labels -->
     <string name="screen_label_movies">Películas</string>
     <string name="screen_label_series">Series</string>
     <string name="screen_label_my_list">Mi lista</string>
+    <string name="screen_label_search">Buscar por título</string>
 
     <!-- Media Type -->
     <string name="media_type_movie">Película</string>
@@ -25,4 +29,5 @@
 
     <!-- Notify Errors -->
     <string name="notify_invalid_api_key">La llave de API usada no es válida</string>
+    <string name="notify_search_empty">Sin resultados</string>
 </resources>

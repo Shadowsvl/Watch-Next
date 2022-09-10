@@ -65,6 +65,6 @@ val fakeWatchMediaList = listOf(
 )
 
 val fakeWatchSection = WatchSection(
-    labelId = R.string.section_cinema_movies,
+    labelId = R.string.section_search_result_movies,
     watchMediaList = fakeWatchMediaList
 )

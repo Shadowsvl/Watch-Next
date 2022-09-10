@@ -167,4 +167,34 @@ class WatchMediaRDS @Inject constructor(
             }
         }
     }
+
+    override suspend fun searchMovies(query: String): DataResult<List<WatchMedia>> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.searchMovie(query).toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun searchSeries(query: String): DataResult<List<WatchMedia>> {
+        return withContext(Dispatchers.IO) {
+            when(val response = tmdbApi.searchTv(query).toServiceResponse(WatchMediaErrorDto::class.java)) {
+                is ServiceResponse.Ok -> DataResult.Success(response.data?.results?.map { it.toWatchMedia() })
+                is ServiceResponse.Error -> {
+                    DataResult.Error(
+                        Message.Text(
+                            response.errorDto?.statusMessage ?: response.errorMessage
+                        )
+                    )
+                }
+            }
+        }
+    }
 }

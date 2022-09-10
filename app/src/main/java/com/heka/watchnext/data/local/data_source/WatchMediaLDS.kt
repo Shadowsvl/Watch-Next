@@ -47,4 +47,10 @@ class WatchMediaLDS @Inject constructor(
         .flowAllMedia()
         .map { it.map { entity -> entity.toWatchMedia() } }
         .flowOn(Dispatchers.IO)
+
+    override suspend fun searchMyList(query: String): List<WatchMedia> {
+        return withContext(Dispatchers.IO) {
+            watchMediaDao.searchMedia(query).map { it.toWatchMedia() }
+        }
+    }
 }

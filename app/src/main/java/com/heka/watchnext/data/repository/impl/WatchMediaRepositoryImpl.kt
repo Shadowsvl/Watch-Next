@@ -90,6 +90,12 @@ class WatchMediaRepositoryImpl @Inject constructor(
     }
 
     override fun getMyList(): Flow<List<WatchMedia>> = watchMediaLocal.getMyList()
+
+    override suspend fun searchMovies(query: String): DataResult<List<WatchMedia>> = watchMediaRemote.searchMovies(query)
+
+    override suspend fun searchSeries(query: String): DataResult<List<WatchMedia>> = watchMediaRemote.searchSeries(query)
+
+    override suspend fun searchMyList(query: String): List<WatchMedia> = watchMediaLocal.searchMyList(query)
 }
 
 interface WatchMediaRemoteDataSource {
@@ -114,6 +120,10 @@ interface WatchMediaRemoteDataSource {
 
     suspend fun getSimilarSeries(id: Long): DataResult<List<WatchMedia>>
 
+    suspend fun searchMovies(query: String): DataResult<List<WatchMedia>>
+
+    suspend fun searchSeries(query: String): DataResult<List<WatchMedia>>
+
 }
 
 interface WatchMediaLocalDataSource {
@@ -129,5 +139,7 @@ interface WatchMediaLocalDataSource {
     suspend fun getMedia(id: Long): WatchMedia?
 
     fun getMyList(): Flow<List<WatchMedia>>
+
+    suspend fun searchMyList(query: String): List<WatchMedia>
 
 }

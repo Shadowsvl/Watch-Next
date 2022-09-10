@@ -45,4 +45,9 @@ interface WatchMediaRepository {
 
     fun getMyList(): Flow<List<WatchMedia>>
 
+    suspend fun searchMovies(query: String): DataResult<List<WatchMedia>>
+
+    suspend fun searchSeries(query: String): DataResult<List<WatchMedia>>
+
+    suspend fun searchMyList(query: String): List<WatchMedia>
 }

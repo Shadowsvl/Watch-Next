@@ -12,12 +12,14 @@ import com.heka.watchnext.ui.screens.detail.DetailScreen
 import com.heka.watchnext.ui.screens.home.HomeScreen
 import com.heka.watchnext.ui.screens.infinite_list.InfiniteListScreen
 import com.heka.watchnext.ui.screens.my_list.MyListScreen
+import com.heka.watchnext.ui.screens.search.SearchScreen
 
 object Routes {
     const val HOME = "home"
     const val DETAIL = "detail"
     const val INFINITE_LIST = "infiniteList"
     const val MY_LIST = "myList"
+    const val SEARCH = "search"
 }
 
 object Arguments {
@@ -40,7 +42,8 @@ fun WatchNextNavGraph(
             HomeScreen(
                 navigateToDetail = actions.navigateToDetail,
                 navigateToInfiniteList = actions.navigateToInfiniteList,
-                navigateToMyList = actions.navigateToMyList
+                navigateToMyList = actions.navigateToMyList,
+                navigateToSearch = actions.navigateToSearch
             )
         }
 
@@ -65,12 +68,21 @@ fun WatchNextNavGraph(
         ) {
             InfiniteListScreen(
                 onBack = actions.navigateBack,
-                navigateToDetail = actions.navigateToDetail
+                navigateToDetail = actions.navigateToDetail,
+                navigateToSearch = actions.navigateToSearch
             )
         }
 
         composable(route = Routes.MY_LIST) {
             MyListScreen(
+                onBack = actions.navigateBack,
+                navigateToDetail = actions.navigateToDetail,
+                navigateToSearch = actions.navigateToSearch
+            )
+        }
+
+        composable(route = Routes.SEARCH) {
+            SearchScreen(
                 onBack = actions.navigateBack,
                 navigateToDetail = actions.navigateToDetail
             )
@@ -90,6 +102,10 @@ private class NavigationActions(navController: NavHostController) {
 
     val navigateToMyList: () -> Unit = {
         navController.navigate(Routes.MY_LIST)
+    }
+
+    val navigateToSearch: () -> Unit = {
+        navController.navigate(Routes.SEARCH)
     }
 
     val navigateBack: () -> Unit = {

@@ -4,10 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,24 +30,33 @@ fun HomeTopBar(
     onMoviesClicked: () -> Unit,
     onSeriesClicked: () -> Unit,
     myListEnabled: Boolean = false,
-    onMyListClicked: () -> Unit
+    onMyListClicked: () -> Unit,
+    searchClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Box(
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colors.surface)
                 .padding(top = BaseDP)
+                .padding(horizontal = BaseDP)
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_watch_next_icon),
                 contentDescription = null,
                 modifier = Modifier
-                    .align(Alignment.Center)
                     .requiredSize(40.dp)
             )
+            IconButton(onClick = searchClicked) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = null
+                )
+            }
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(BaseDP),
@@ -67,7 +75,9 @@ fun HomeTopBar(
                 )
         ) {
             Spacer(modifier = Modifier.width(SpaceDP))
-            TextButton(onClick = onMoviesClicked) {
+            TextButton(
+                onClick = onMoviesClicked
+            ) {
                 Text(
                     text = stringResource(id = R.string.screen_label_movies),
                     style = MaterialTheme.typography.h6,
@@ -106,7 +116,8 @@ private fun HomeTopBarPreview() {
                 onMoviesClicked = {},
                 onSeriesClicked = {},
                 myListEnabled = true,
-                onMyListClicked = {}
+                onMyListClicked = {},
+                searchClicked = {}
             )
         }
     }
