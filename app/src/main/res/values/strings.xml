@@ -29,5 +29,5 @@
 
     <!-- Notify Errors -->
     <string name="notify_invalid_api_key">La llave de API usada no es válida</string>
-    <string name="notify_search_empty">Sin resultados</string>
+    <string name="notify_search_empty">No hay resultados</string>
 </resources>
