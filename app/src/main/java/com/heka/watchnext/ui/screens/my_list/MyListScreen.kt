@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 fun MyListScreen(
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: MyListViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -47,6 +48,7 @@ fun MyListScreen(
         uiState = uiState,
         onBack = onBack,
         navigateToDetail = navigateToDetail,
+        navigateToSearch = navigateToSearch,
         onEvent = viewModel::onEvent
     )
 }
@@ -59,6 +61,7 @@ private fun MyListScreen(
     uiState: MyListUiState,
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToSearch: () -> Unit,
     onEvent: (MyListEvent) -> Unit
 ) {
 
@@ -90,9 +93,11 @@ private fun MyListScreen(
                     modifier = Modifier.fillMaxSize()
                 )
 
-                WatchNextScreenTopBar(screenLabelId = R.string.screen_label_my_list) {
-                    onBack()
-                }
+                WatchNextScreenTopBar(
+                    screenLabelId = R.string.screen_label_my_list,
+                    onBack = onBack,
+                    searchClicked = navigateToSearch
+                )
 
                 if (showUpButton) {
                     UpButton(
@@ -127,6 +132,7 @@ private fun MyListScreenPreview() {
                 ),
                 onBack = {},
                 navigateToDetail = {_,_ -> },
+                navigateToSearch = {},
                 onEvent = {}
             )
         }

@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 fun InfiniteListScreen(
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: InfiniteListViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -58,6 +59,7 @@ fun InfiniteListScreen(
         uiState = uiState,
         onBack = onBack,
         navigateToDetail = navigateToDetail,
+        navigateToSearch = navigateToSearch,
         onEvent = viewModel::onEvent
     )
 }
@@ -70,6 +72,7 @@ private fun InfiniteListScreen(
     uiState: InfiniteListUiState,
     onBack: () -> Unit,
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
+    navigateToSearch: () -> Unit,
     onEvent: (InfiniteListEvent) -> Unit
 ) {
 
@@ -101,9 +104,11 @@ private fun InfiniteListScreen(
                     modifier = Modifier.fillMaxSize()
                 )
 
-                WatchNextScreenTopBar(screenLabelId = uiState.screenLabelId) {
-                    onBack()
-                }
+                WatchNextScreenTopBar(
+                    screenLabelId = uiState.screenLabelId,
+                    onBack = onBack,
+                    searchClicked = navigateToSearch
+                )
 
                 if (showUpButton) {
                     UpButton(
@@ -134,6 +139,7 @@ private fun InfiniteListScreenPreview() {
                 ),
                 onBack = {},
                 navigateToDetail = {_,_ -> },
+                navigateToSearch = {},
                 onEvent = {}
             )
         }

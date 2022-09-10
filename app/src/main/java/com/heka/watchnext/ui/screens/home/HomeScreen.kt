@@ -31,6 +31,7 @@ fun HomeScreen(
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     navigateToInfiniteList: (mediaTypeName: String) -> Unit,
     navigateToMyList: () -> Unit,
+    navigateToSearch: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -57,6 +58,7 @@ fun HomeScreen(
         navigateToDetail = navigateToDetail,
         navigateToInfiniteList = navigateToInfiniteList,
         navigateToMyList = navigateToMyList,
+        navigateToSearch = navigateToSearch,
         onEvent = viewModel::onEvent
     )
 }
@@ -70,6 +72,7 @@ private fun HomeScreen(
     navigateToDetail: (mediaId: Long, mediaTypeName: String) -> Unit,
     navigateToInfiniteList: (mediaTypeName: String) -> Unit,
     navigateToMyList: () -> Unit,
+    navigateToSearch: () -> Unit,
     onEvent: (HomeEvent) -> Unit
 ) {
     WatchMediaBottomSheetLayout(
@@ -131,7 +134,8 @@ private fun HomeScreen(
                     onMoviesClicked = { navigateToInfiniteList(MediaType.Movie.name) },
                     onSeriesClicked = { navigateToInfiniteList(MediaType.Tv.name) },
                     myListEnabled = uiState.myListLatest.isNotEmpty(),
-                    onMyListClicked = { navigateToMyList() }
+                    onMyListClicked = navigateToMyList,
+                    searchClicked = navigateToSearch
                 )
             }
         }
@@ -154,6 +158,7 @@ private fun HomeScreenPreview() {
                 navigateToDetail = { _,_ -> },
                 navigateToInfiniteList = {},
                 navigateToMyList = {},
+                navigateToSearch = {},
                 onEvent = {}
             )
         }
