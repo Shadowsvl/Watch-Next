@@ -15,7 +15,7 @@ La aplicación consta de cinco pantallas:
 4. Listado de películas y series guardadas.
 5. Búsqueda de contenido por título.
 
-Las pantallas muestran una vista previa con la información del contenido seleccionado, que permite agregar fácilmente a tu listado, así como navegar a la pantalla de detalle.
+Cada pantalla muestra una vista previa con la información del contenido seleccionado, que permite agregar fácilmente a tu listado, así como navegar a la pantalla de detalle.
 
 #### Dependencias principales
 * **Compose** - UI
@@ -29,6 +29,7 @@ Las pantallas muestran una vista previa con la información del contenido selecc
 El proyecto utiliza [The Movie DB API](https://www.themoviedb.org/documentation/api). Puedes registrarte para obtener una llave de API.
 
 Es necesario que agregues la llave a tu archivo **local.properties**
+
 `API_KEY=<TuLlaveDeAPI>`
 
 ## Capturas
