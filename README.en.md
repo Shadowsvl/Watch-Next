@@ -24,7 +24,7 @@ Each screen shows a preview with the information of the selected content, which 
 * **Retrofit** - HTTP client
 * **Coil** - Image loading
 
-## Requisitos
+## Requirements
 
 The project uses [The Movie DB API](https://www.themoviedb.org/documentation/api). You can sign up for an API key.
 
@@ -32,7 +32,7 @@ You need to add the key to your **local.properties** file
 
 `API_KEY=<YourAPIKey>`
 
-## Capturas
+## Screenshots
 
 <img src="https://drive.google.com/uc?id=1LTUZVzOR54af9KFk6iLg4zlGVJci87lH" alt="Screenshot">
 <img src="https://drive.google.com/uc?id=1yBbd_UHjMc60B4Fe8BPwAEW5GbM5Dj7q" alt="Screenshot">
